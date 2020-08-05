@@ -1,0 +1,6 @@
+bf	~/.config/bmfiles
+bd	~/.config/bmdirs
+cfa	~/.config/aliasrc
+cfz	~/.config/zsh/.zshrc
+cfv	~/.config/nvim/init.vim
+

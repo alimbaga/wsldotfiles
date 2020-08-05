@@ -1,0 +1,11 @@
+# You can add comments to these files with #
+h	~/
+d	~/Documents
+D	~/Downloads
+m	~/Music
+cf	~/.config
+sc	~/.local/bin
+log ~/.logs
+work /mnt/c/Users/alimbaga/Workspace
+iotboard /mnt/c/Users/alimbaga/Workspace/iot-sensor-dev-bitbucket/iot-sensor-board
+
