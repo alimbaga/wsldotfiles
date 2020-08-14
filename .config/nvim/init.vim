@@ -32,9 +32,6 @@ Plug 'tpope/vim-surround'
 " Navigate and manipulate filesn a tree view
 Plug 'scrooloose/nerdtree'
 
-" Zoom in and out of a specific split pane (similar to tmux).
-Plug 'dhruvasagar/vim-zoom'
-
 Plug 'christoomey/vim-tmux-navigator'
 
 " Toggle comments in various ways. gcc
@@ -43,20 +40,11 @@ Plug 'tpope/vim-commentary'
 " Automatically set 'shiftwidth' + 'expandtab' (indention) based on file type.
 Plug 'tpope/vim-sleuth'
 
-" Distraction free writing by removing UI elements and centering everything.
-Plug 'junegunn/goyo.vim'
-
 " Draw a nice statusline at the bottom of each window
 Plug 'vim-airline/vim-airline'
 
 " add end tags
 Plug 'tpope/vim-endwise'
-
-" Vim like file manager
-Plug 'vifm/vifm.vim'
-
-" Xaiemon that reacs to input events by executing commands
-Plug 'kovetskiy/sxhkd-vim'
 
 " HTML expanding abbreviations
 Plug 'mattn/emmet-vim'
@@ -139,7 +127,6 @@ set splitright
 set tabstop=2
 set textwidth=0
 set ttimeout
-set undodir=/tmp//,.
 set virtualedit=block
 set whichwrap=b,s,<,>
 set wildmenu
@@ -222,30 +209,8 @@ xnoremap p pgvy
 " Check file in shellcheck:
 noremap <leader>s :!clear && shellcheck %<CR>
 
-" Open my bibliography file in split
-"noremap <leader>b :vsp<space>$BIB<CR>
-"noremap <leader>r :vsp<space>$REFER<CR>
-
 " Replace all is aliased to S.
 nnoremap S :%s//g<Left><Left>
-
-" Compile document, be it groff/LaTeX/markdown/etc.
-noremap <leader>c :w! \| !compiler <c-r>%<CR>
-
-" Open corresponding .pdf/.html or preview
-noremap <leader>p :!opout <c-r>%<CR><CR>
-
-" Runs a script that cleans out tex build files whenever I close out of a .tex file.
-autocmd VimLeave *.tex !texclear %
-
-autocmd BufRead,BufNewFile /tmp/calcurse*,~/.calcurse/notes/* set filetype=markdown
-autocmd BufRead,BufNewFile *.ms,*.me,*.mom,*.man set filetype=groff
-autocmd BufRead,BufNewFile *.tex set filetype=tex
-
-" Enable Goyo by default for mutt writting
-" Goyo's width will be the line limit in mutt.
-autocmd BufRead,BufNewFile /tmp/neomutt* let g:goyo_width=80
-autocmd BufRead,BufNewFile /tmp/neomutt* :Goyo \| set bg=light
 
 " Automatically deletes all trailing whitespace on save.
 autocmd BufWritePre * %s/\s\+$//e
@@ -253,24 +218,8 @@ autocmd BufWritePre * %s/\s\+$//e
 " When shortcut files are updated, renew bash and vifm configs with new material:
 autocmd BufWritePost ~/.config/bmdirs,~/.config/bmfiles !shortcuts
 
-" Update binds when sxhkdrc is updated.
-autocmd BufWritePost *sxhkdrc !pkill -USR1 sxhkd
-
-" Run xrdb whenever Xdefaults or Xresources are updated.
-autocmd BufWritePost *Xresources,*Xdefaults !xrdb %
-
-" Navigating with guides
-vnoremap <leader><leader> <Esc>/<++><Enter>"_c4l
-noremap <leader><leader> <Esc>/<++><Enter>"_c4l
-
 " Save file as sudo on files that require root permission
 cnoremap w!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
-
-" LaTEX word count:
-autocmd FileType tex map <leader>w :w !detex \| wc -w<CR>
-
-" vim latex live preview
-let g:livepreview_previewer = 'zathura'
 
 " Saving for the worst
 set backup
@@ -354,19 +303,6 @@ nmap <leader>9 <Plug>AirlineSelectTab9
 
 " Show just the filename
 let g:airline#extensions#tabline#fnamemod = ":t"
-" let g:airline_powerline_fonts = 1
-" if !exists('g:airline_symbols')
-"     let g:airline_symbols = {}
-" endif
-
-" let g:airline_left_sep = ''
-" let g:airline_left_alt_sep = ''
-" let g:airline_right_sep = ''
-" let g:airline_right_alt_sep = ''
-" let g:airline_symbols.branch = ''
-" let g:airline_symbols.readonly = ''
-" let g:airline_symbols.linenr = '☰'
-" let g:airline_symbols.maxlinenr = ''
 
 " enable/disable ale integration
 let g:airline#extensions#ale#enabled = 1
@@ -397,13 +333,3 @@ let g:UltiSnipsJumpBackwardTrigger="<tab>b"
 
 " Edit ultisnip file for
 noremap <leader>es :UltiSnipsEdit<CR>
-
-"=#=#=#=#= VIMLaTEX =#=#=#=#="
-let g:tex_flavor='latex'
-let g:vimtex_view_method='zathura'
-let g:vimtex_quickfix_mode=0
-
-" call deoplete#custom#var('omni', 'input_patterns', {
-"       \ 'tex': g:vimtex#re#deoplete
-"       \})
-
