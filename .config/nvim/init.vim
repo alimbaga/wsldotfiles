@@ -187,9 +187,17 @@ set iskeyword+=-
 
 set scrolloff=3
 
+set wrap
+
+set whichwrap=b,s,<,>
+
+set mouse=a
+
 set number relativenumber
 
 colorscheme gruvbox-material
+
+
 " }}}
 
 " {{{ Autocommands
@@ -210,6 +218,7 @@ au FileType gitconfig,apache,sql setl noexpandtab nolist
 " Folding
 au FileType html,htmldjango,css,sass,javascript,coffee,python,ruby,eruby setl foldmethod=indent foldenable
 au FileType json setl foldmethod=indent foldenable shiftwidth=4 softtabstop=4 tabstop=4 expandtab
+au Filetype vim setl foldmethod=marker foldenable
 
 " Tabstop/Shiftwidth
 au FileType mustache,ruby,eruby,javascript,coffee,sass,scss setl softtabstop=2 shiftwidth=2 tabstop=2
@@ -342,7 +351,6 @@ nnoremap ,<TAB> :set et! list!<CR>
 
 " Insert timestamp
 nnoremap <leader>d "=strftime("%-l:%M%p")<CR>P
-inoremap <leader>d <C-r>=strftime("%-l:%M%p")<CR>
 
 " Spell-check set to <leader>o, 'o' for 'orthography':
 nnoremap <leader>o :setlocal spell! spelllang=en_us<CR>
