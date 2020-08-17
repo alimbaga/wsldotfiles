@@ -429,14 +429,27 @@ function! MySessionSave()
 endfunction
 " }}}
 
+function! GitBranch()
+  return system("git rev-parse --abbrev-ref HEAD 2>/dev/null | tr -d '\n'")
+endfunction
+
+function! StatuslineGit()
+  let l:branchname = GitBranch()
+  return strlen(l:branchname) > 0?'  '.l:branchname.' ':''
+endfunction
+
 " MyStatusLine() {{{
 
 function! MyStatusLine()
     let statusline = ""
+    let statusline .= "%#Title#"
     " Filename (F -> full, f -> relative)
-    let statusline .= "%f"
+    let statusline .= "%t "
+    let statusline .= "%#StatusLine#"
+    let statusline .= "%{StatuslineGit()}"
     " Buffer flags
     let statusline .= "%( %h%1*%m%*%r%w%) "
+    let statusline .= "%#StatusLineNC#"
     " File format and type
     let statusline .= "(%{&ff}%(\/%Y%))"
     " Left/right separator
