@@ -27,6 +27,28 @@ call plug#begin('~/.config/nvim/plugged')
 
 " <PLUGINS>
 
+" {{{ gruvbox
+"     =======
+
+Plug 'sainnhe/gruvbox-material'
+
+" OPTIONS:
+
+if has('termguicolors')
+  set termguicolors
+endif
+
+" For dark version.
+set background=dark
+
+" Set contrast.
+" This configuration option should be placed before `colorscheme gruvbox-material`.
+" Available values: 'hard', 'medium'(default), 'soft'
+let g:gruvbox_material_background = 'hard'
+let g:gruvbox_material_transparent_background = 1
+
+" }}}
+
 " {{{ ack.vim
 "     =======
 
@@ -66,7 +88,6 @@ Plug 'tpope/vim-markdown'
 let g:markdown_fenced_languages = ['html', 'python', 'ruby', 'yaml', 'haml', 'bash=sh']
 
 Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-git'
 Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-eunuch'
 
@@ -167,6 +188,8 @@ set iskeyword+=-
 set scrolloff=3
 
 set number relativenumber
+
+colorscheme gruvbox-material
 " }}}
 
 " {{{ Autocommands
@@ -220,7 +243,7 @@ let backup_path = expand('~/.local/data/nvim/backup')
 
 if !isdirectory(backup_path)
 	call system('mkdir -p ' . backup_path)
-endif    
+endif
 
 
 let &backupdir= backup_path
@@ -237,7 +260,7 @@ au BufWritePre * let &bex = '@' . strftime("%F")
 let swap_path = expand('~/.local/data/nvim/swap')
 if !isdirectory(swap_path)
 	call system('mkdir -p ' . swap_path)
-endif    
+endif
 
 let &directory= swap_path
 
@@ -245,18 +268,18 @@ set swapfile
 
 " guard for distributions lacking the 'persistent_undo' feature.
 if has('persistent_undo')
-	
-	let undo_path = expand('~/.local/data/nvim/undo')    
+
+	let undo_path = expand('~/.local/data/nvim/undo')
 
 	" create the directory and any parent directories
     " if the location does not exist.
     if !isdirectory(undo_path)
         call system('mkdir -p ' . undo_path)
-    endif    
-	
+    endif
+
 	" point Vim to the defined undo directory.
-    let &undodir = undo_path    
-	
+    let &undodir = undo_path
+
 	" finally, enable undo persistence.
     set undofile
 endif
@@ -318,8 +341,8 @@ nnoremap ,! q:k0ea!<ESC>
 nnoremap ,<TAB> :set et! list!<CR>
 
 " Insert timestamp
-nnoremap <C-d> "=strftime("%-l:%M%p")<CR>P
-inoremap <C-d> <C-r>=strftime("%-l:%M%p")<CR>
+nnoremap <leader>d "=strftime("%-l:%M%p")<CR>P
+inoremap <leader>d <C-r>=strftime("%-l:%M%p")<CR>
 
 " Spell-check set to <leader>o, 'o' for 'orthography':
 nnoremap <leader>o :setlocal spell! spelllang=en_us<CR>
@@ -495,5 +518,3 @@ endfunction
 " }}} Sane pasting
 
 " }}} Custom Functions
-
-
