@@ -46,6 +46,51 @@ set background=dark
 " Available values: 'hard', 'medium'(default), 'soft'
 let g:gruvbox_material_background = 'hard'
 let g:gruvbox_material_transparent_background = 1
+let g:airline_theme = 'gruvbox_material'
+" }}}
+
+" {{{ ale
+"     ===
+Plug 'dense-analysis/ale'
+
+" }}}
+
+" {{{ vim-airline
+"     ===========
+
+Plug 'vim-airline/vim-airline'
+
+"OPTIONS:
+
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#show_splits = 1
+let g:airline#extensions#tabline#show_tab_count = 1
+
+" Gotta be quick about changing buffers"
+let g:airline#extensions#tabline#buffer_idx_mode = 1
+" Show just the filename
+let g:airline#extensions#tabline#fnamemod = ":t"
+
+" enable/disable ale integration
+let g:airline#extensions#ale#enabled = 1
+
+" ale error_symbol
+let airline#extensions#ale#error_symbol = 'E:'
+
+" ale warning
+let airline#extensions#ale#warning_symbol = 'W:'
+
+"ale show_line_numbers
+let airline#extensions#ale#show_line_numbers = 1
+
+" ale open_lnum_symbol
+let airline#extensions#ale#open_lnum_symbol = '(L'
+
+"ale close_lnum_symbol
+let airline#extensions#ale#close_lnum_symbol = ')'
+
+" Giting it done
+let g:airline#extensions#branch#empty_message = 'nihil'
 
 " }}}
 
@@ -90,6 +135,7 @@ let g:markdown_fenced_languages = ['html', 'python', 'ruby', 'yaml', 'haml', 'ba
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-eunuch'
+Plug 'tpope/vim-sleuth'
 
 " }}}
 
@@ -135,7 +181,6 @@ filetype plugin indent on
 
 " Modelines
 set modelines=2
-set modeline
 
 " For clever completion with the :find command
 set path+=**
@@ -160,21 +205,15 @@ set hidden
 " Spelling
 set spelllang=en_us
 
-" Text display
-set listchars=trail:.,tab:>-,extends:>,precedes:<,nbsp:¬
-set list
-
 " Typing behavior
-set backspace=indent,eol,start
+set backspace=2
 set showmatch
 set wildmode=full
 set wildmenu
 set complete-=i
 
 " Formatting
-set nowrap
 set tabstop=2 shiftwidth=2 softtabstop=2
-set foldlevelstart=2
 
 " Status line
 set statusline=%!MyStatusLine()
@@ -185,18 +224,44 @@ set sessionoptions=blank,buffers,curdir,folds,help,tabpages,winsize,localoptions
 " Word splitting
 set iskeyword+=-
 
+" Space at top/bottom before scrolling page
 set scrolloff=3
 
+" Wraps long lines to the next line (does not create a new line)
 set wrap
 
 set whichwrap=b,s,<,>
 
+" Enables mouse interaction -- usefull for resizing panes with a mouse
 set mouse=a
 
+" Displays line number and relative line numbers
 set number relativenumber
 
-colorscheme gruvbox-material
+set expandtab smarttab
 
+set autoindent
+
+set autoread
+
+" ALWAYS use the clipboard for ALL operations
+set clipboard=unnamedplus
+
+set encoding=utf-8
+
+set formatoptions=tcqrn1
+
+set lazyredraw
+
+set noerrorbells visualbell t_vb=
+
+set noshiftround
+
+set nostartofline
+
+set textwidth=0
+
+colorscheme gruvbox-material
 
 " }}}
 
@@ -208,32 +273,14 @@ au ColorScheme * hi User1 gui=bold term=bold cterm=bold guifg=white guibg=red ct
 " Tweak the color of the fold display column
 au ColorScheme * hi FoldColumn cterm=bold ctermbg=233 ctermfg=146
 
-" Spaces Only
-au FileType swift,mustache,markdown,cpp,hpp,vim,sh,html,htmldjango,css,sass,scss,javascript,coffee,python,ruby,eruby setl expandtab list
-
-" Tabs Only
-au FileType c,h,make setl foldmethod=syntax noexpandtab nolist
-au FileType gitconfig,apache,sql setl noexpandtab nolist
-
-" Folding
-au FileType html,htmldjango,css,sass,javascript,coffee,python,ruby,eruby setl foldmethod=indent foldenable
-au FileType json setl foldmethod=indent foldenable shiftwidth=4 softtabstop=4 tabstop=4 expandtab
-au Filetype vim setl foldmethod=marker foldenable
-
-" Tabstop/Shiftwidth
-au FileType mustache,ruby,eruby,javascript,coffee,sass,scss setl softtabstop=2 shiftwidth=2 tabstop=2
-au FileType rst setl softtabstop=3 shiftwidth=3 tabstop=3
-
-" Other
-au FileType python let b:python_highlight_all=1
-au FileType diary setl wrap linebreak nolist
-au FileType markdown setl linebreak
-
 " Automatically deletes all trailing whitespace on save.
 autocmd BufWritePre * %s/\s\+$//e
 
 " When shortcut files are updated, renew bash and vifm configs with new material:
 autocmd BufWritePost ~/.config/bmdirs,~/.config/bmfiles !shortcuts
+
+highlight ColorColumn ctermbg=magenta
+call matchadd('ColorColumn', '\%81v', 100)
 
 " }}}
 
@@ -252,7 +299,7 @@ let backup_path = expand('~/.local/data/nvim/backup')
 
 if !isdirectory(backup_path)
 	call system('mkdir -p ' . backup_path)
-endif
+endi
 
 
 let &backupdir= backup_path
@@ -299,27 +346,8 @@ endif
 let mapleader=" "
 let maplocalleader=" "
 
-" Run shell command
-" ... and print output
-nnoremap <C-h> :.w !bash<CR>
-" ... and append output
-nnoremap <C-l> yyp!!bash<CR>
-
-" Easy quickfix navigation
-nnoremap <C-n> :cn<CR>
-nnoremap <C-p> :cp<CR>
-
 " Easy header/source swap
 nnoremap [f :call SourceHeaderSwap()<CR>
-
-" Usual ^^ behavior re-adds to the buffer list; this leaves it hidden
-nnoremap <C-^> :b#<CR>
-
-" Select the stuff I just pasted
-nnoremap gV `[V`]
-
-" Create a new HTML document.
-" nnoremap ,html :-1read $HOME/.vim/.skeleton.html<CR>3jwf>a
 
 " Sane pasting
 command! Paste call SmartPaste()
@@ -328,26 +356,17 @@ command! Paste call SmartPaste()
 nnoremap ,v :source $MYVIMRC<CR>
 nnoremap ,e :edit $MYVIMRC<CR>
 
-" Quickly change search hilighting
-nnoremap <silent> ; :set invhlsearch<CR>
-
 " camelCase => camel_case
 vnoremap ,case :s/\v\C(([a-z]+)([A-Z]))/\2_\l\3/g<CR>
 
 " Session mappings
 nnoremap ,s :mksession! Session.vim<CR>
 
-" Resizing split windows
-nnoremap ,w :call SwapSplitResizeShortcuts()<CR>
-
 " Directory of current file (not pwd)
 cnoremap %% <C-R>=expand('%:h').'/'<CR>
 
 " Redo last Ex command with bang
 nnoremap ,! q:k0ea!<ESC>
-
-" Swap tab/space mode
-nnoremap ,<TAB> :set et! list!<CR>
 
 " Insert timestamp
 nnoremap <leader>d "=strftime("%-l:%M%p")<CR>P
@@ -417,6 +436,16 @@ inoremap ( ()<left>
 inoremap [ []<left>
 inoremap { {}<left>
 
+nmap <leader>1 <Plug>AirlineSelectTab1
+nmap <leader>2 <Plug>AirlineSelectTab2
+nmap <leader>3 <Plug>AirlineSelectTab3
+nmap <leader>4 <Plug>AirlineSelectTab4
+nmap <leader>5 <Plug>AirlineSelectTab5
+nmap <leader>6 <Plug>AirlineSelectTab6
+nmap <leader>7 <Plug>AirlineSelectTab7
+nmap <leader>8 <Plug>AirlineSelectTab8
+nmap <leader>9 <Plug>AirlineSelectTab9
+
 " }}}
 
 " Custom Functions {{{
@@ -451,7 +480,7 @@ function! MyStatusLine()
     let statusline .= "%( %h%1*%m%*%r%w%) "
     let statusline .= "%#StatusLineNC#"
     " File format and type
-    let statusline .= "(%{&ff}%(\/%Y%))"
+    let statusline .= "(%{&ff}%(\/%y%))"
     " Left/right separator
     let statusline .= "%="
     " Line & column
@@ -481,49 +510,6 @@ function! SourceHeaderSwap()
         endif
     else
         edit %<.h
-    endif
-endfunction
-" }}}
-
-" MyNext() and MyPrev(): Movement between tabs OR buffers {{{
-function! MyNext()
-    if exists( '*tabpagenr' ) && tabpagenr('$') != 1
-        " Tab support && tabs open
-        normal gt
-    else
-        " No tab support, or no tabs open
-        execute ":bnext"
-    endif
-endfunction
-function! MyPrev()
-    if exists( '*tabpagenr' ) && tabpagenr('$') != '1'
-        " Tab support && tabs open
-        normal gT
-    else
-        " No tab support, or no tabs open
-        execute ":bprev"
-    endif
-endfunction
-" }}}
-
-" SwapSplitResizeShortcuts(): Resizing split windows {{{
-if !exists( 'g:resizeshortcuts' )
-    let g:resizeshortcuts = 'horizontal'
-    nnoremap _ <C-w>-
-    nnoremap + <C-w>+
-endif
-
-function! SwapSplitResizeShortcuts()
-    if g:resizeshortcuts == 'horizontal'
-        let g:resizeshortcuts = 'vertical'
-        nnoremap _ <C-w><
-        nnoremap + <C-w>>
-        echo "Vertical split-resizing shortcut mode."
-    else
-        let g:resizeshortcuts = 'horizontal'
-        nnoremap _ <C-w>-
-        nnoremap + <C-w>+
-        echo "Horizontal split-resizing shortcut mode."
     endif
 endfunction
 " }}}
